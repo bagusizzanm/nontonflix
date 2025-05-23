@@ -1,6 +1,6 @@
-# 🎬 NontonFlix – Platform Streaming Video Profesional
+# 🎬 NontonFlix – Platform Streaming Video
 
-**NontonFlix** adalah platform streaming video berbasis web yang dibangun dengan Laravel 11. Platform ini menyediakan fitur langganan premium, autentikasi aman, serta integrasi dengan sistem pembayaran menggunakan Midtrans. Cocok untuk pengembangan produk digital, MVP startup, maupun proyek skala profesional.
+**NontonFlix** adalah platform streaming video berbasis web yang dibangun dengan Laravel 11. Platform ini menyediakan fitur langganan premium (subcription), autentikasi aman, serta integrasi dengan sistem pembayaran menggunakan Midtrans.
 
 ---
 
