@@ -8,6 +8,7 @@
   <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo-icon.png') }}" />
 </head>
 
 <body>
@@ -15,7 +16,8 @@
     <div class="row align-items-center justify-content-center">
       <div class="col-lg-4 col-md-6 offset-md-6">
         <div class="text-center">
-          <h3 class="nontonflix-text">NontonFlix</h3>
+          <img src="{{ asset('assets/img/logo-text.png') }}" class="nontonflix-title"
+            style="width: 300px; height: auto;" alt="Nontonflix Logo">
           <h4 class="nontonflix-sign-in">@yield('page-title')</h4>
         </div>
         @if ($errors->any())
