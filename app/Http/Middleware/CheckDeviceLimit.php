@@ -47,7 +47,7 @@ class CheckDeviceLimit
       $device = $this->deviceService->registerDevices($user);
       if (!$device) {
         Auth::logout();
-        return redirect()->route('login')->withErrors(['device' => 'Anda telah mencapai batas maksimum perangkat. Silahkan login dari perangkat lain.']);
+        return redirect()->route('login')->withErrors(['device' => 'Anda telah mencapai batas maksimum perangkat. Silahkan logout dari perangkat lain.']);
       }
     }
     return $next($request);

@@ -11,10 +11,11 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('categories', function (Blueprint $table) {
+    Schema::create('ratings', function (Blueprint $table) {
       $table->id();
-      $table->string('title');
-      $table->string('slug')->unique();
+      $table->foreignId('user_id')->constrained()->onDelete('cascade');
+      $table->foreignId('movie_id')->constrained()->onDelete('cascade');
+      $table->decimal('rating', 3, 1)->unsigned();
       $table->timestamps();
     });
   }
@@ -24,6 +25,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('categories');
+    Schema::dropIfExists('ratings');
   }
 };
