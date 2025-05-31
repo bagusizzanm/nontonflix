@@ -6,9 +6,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubscribeController;
 
-Route::get('/', function () {
-  return view('welcome');
-});
+Route::get('/', [MovieController::class, 'index']);
 
 Route::get('/home', [MovieController::class, 'index'])->name('home');
 Route::get('/movies', [MovieController::class, 'all'])->name('movies.index');
@@ -28,3 +26,10 @@ Route::get('/subscribe/success', [SubscribeController::class, 'showSuccess'])->n
 Route::post('/logout', function (Request $request) {
   return app(\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class)->destroy($request);
 })->name('logout')->middleware(['auth', 'logout.device']);
+
+
+Route::get('test-expired', function () {
+  $membership = \App\Models\Membership::find(1);
+  event(new \App\Events\MembershipHasExpired($membership)); // trigger event
+  return 'Event fired';
+})->name('test.expired');

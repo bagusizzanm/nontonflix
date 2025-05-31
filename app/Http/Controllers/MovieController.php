@@ -13,8 +13,13 @@ class MovieController extends Controller implements HasMiddleware
   {
     return ['auth', 'check.device.limit'];
   }
+
   public function index()
   {
+    // cek middleware, auth, device limit, dan middleware subscribe
+    if (!Auth::check()) {
+      return redirect()->route('login');
+    }
     $latestMovies = Movie::latest()->limit(8)->get();
     $popularMovies = Movie::with('ratings')
       ->get()->sortByDesc('average_rating')
@@ -29,6 +34,9 @@ class MovieController extends Controller implements HasMiddleware
   public function show(Movie $movie)
   {
     $userPlan = Auth::user()->getCurrentPlan();
+    if (!$userPlan) {
+      return redirect()->route('subscribe.plans');
+    }
     $streamingUrl = $movie->getStreamingUrl($userPlan->resolution);
     return view('movies.show', [
       'movie' => $movie,
