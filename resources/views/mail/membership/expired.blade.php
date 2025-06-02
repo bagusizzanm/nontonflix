@@ -1,15 +1,15 @@
-@component('mail::message')
+<x-mail::message>
+  # Membership Expired
 
-# Membership Expired
+  Hi {{ $membership->user->name }},
 
-Hi {{ $membership->user->name }},
+  Your membership has expired on **{{ $membership->end_date->format('d M Y') }}**.
 
-Your membership has expired on **{{ $membership->end_date->format('d M Y') }}**.
+  <x-mail::button :url="url('/renew')">
+    Renew Membership
+  </x-mail::button>
 
-@component('mail::button', ['url' => url('/renew')])
-Renew Membership
-@endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
-@endcomponent
+  Thanks,<br>
+  {{ config('app.name') }}
+</x-mail::message>

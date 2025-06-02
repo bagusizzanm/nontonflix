@@ -9,7 +9,7 @@
   <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}">
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo-icon.png') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo-icon2.png') }}" />
   <style>
     body {
       background-color: #132029;

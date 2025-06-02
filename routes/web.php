@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\TransactionController;
 
 Route::get('/', [MovieController::class, 'index']);
 
@@ -22,6 +23,8 @@ Route::get('/subscribe/plan/{plan}', [SubscribeController::class, 'checkoutPlans
 Route::post('/subscribe/checkout', [SubscribeController::class, 'prosessCheckout'])->name('subscribe.process');
 
 Route::get('/subscribe/success', [SubscribeController::class, 'showSuccess'])->name('subscribe.success');
+
+Route::get('/checkout', [TransactionController::class, 'checkout'])->name('checkout');
 
 Route::post('/logout', function (Request $request) {
   return app(\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class)->destroy($request);
