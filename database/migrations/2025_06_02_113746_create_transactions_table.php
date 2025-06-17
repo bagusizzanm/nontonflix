@@ -20,7 +20,7 @@ return new class extends Migration
       $table->enum('payment_status', ['pending', 'success', 'failed', 'expired']);
       $table->string('midtrans_snap_token')->nullable();
       $table->string('midtrans_booking_code')->nullable();
-      $table->string('midtrans_trandsaction_id')->nullable();
+      $table->string('midtrans_transaction_id')->nullable();
       $table->timestamps();
     });
   }

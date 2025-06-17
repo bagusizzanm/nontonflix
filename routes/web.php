@@ -9,22 +9,19 @@ use App\Http\Controllers\TransactionController;
 
 Route::get('/', [MovieController::class, 'index']);
 
+Route::get('/subscribe/plans', [SubscribeController::class, 'showPlans'])->name('subscribe.plans');
+Route::get('/subscribe/plan/{plan}', [SubscribeController::class, 'checkoutPlans'])->name('subscribe.checkout');
+Route::post('/subscribe/checkout', [SubscribeController::class, 'prosessCheckout'])->name('subscribe.process');
+Route::get('/subscribe/success', [SubscribeController::class, 'showSuccess'])->name('subscribe.success');
+
+Route::post('/checkout', [TransactionController::class, 'checkout'])->name('checkout');
+
 Route::get('/home', [MovieController::class, 'index'])->name('home');
 Route::get('/movies', [MovieController::class, 'all'])->name('movies.index');
 Route::get('/movies/search', [MovieController::class, 'search'])->name('movies.search');
 Route::get('/movies/{movie:slug}', [MovieController::class, 'show'])->name('movies.show');
 
 Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
-
-Route::get('/subscribe/plans', [SubscribeController::class, 'showPlans'])->name('subscribe.plans');
-
-Route::get('/subscribe/plan/{plan}', [SubscribeController::class, 'checkoutPlans'])->name('subscribe.checkout');
-
-Route::post('/subscribe/checkout', [SubscribeController::class, 'prosessCheckout'])->name('subscribe.process');
-
-Route::get('/subscribe/success', [SubscribeController::class, 'showSuccess'])->name('subscribe.success');
-
-Route::get('/checkout', [TransactionController::class, 'checkout'])->name('checkout');
 
 Route::post('/logout', function (Request $request) {
   return app(\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class)->destroy($request);

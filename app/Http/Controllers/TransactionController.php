@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Midtrans\Snap;
-use Midtrans\Config;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class TransactionController extends Controller
 {
   public function __construct()
   {
-    Config::$isProduction = config('midtrans.is_production');
     Config::$serverKey = config('midtrans.server_key');
+    Config::$isProduction = config('midtrans.is_production');
     Config::$isSanitized = config('midtrans.is_sanitized');
     Config::$is3ds = config('midtrans.is_3ds');
   }
@@ -34,8 +34,8 @@ class TransactionController extends Controller
       'user_id' => $user->id,
       'plan_id' => $request->plan_id,
       'transaction_number' => $transactionNumber,
-      'total_amount' => $request->total_payment,
-      'payment_status' => 'pending',
+      'total_amount' => $request->amount,
+      'payment_status' => 'pending'
     ]);
 
     $payload = [
@@ -46,15 +46,15 @@ class TransactionController extends Controller
       'customer_details' => [
         'first_name' => $user->name,
         'email' => $user->email,
-        'phone' => '000000000000000'
+        'phone' => '000000000000',
       ],
       'item_details' => [
         [
           'id' => $transaction->plan_id,
           'price' => (int) $transaction->total_amount,
           'quantity' => 1,
-          'name' => $transaction->plan->name
-        ]
+          'name' => $transaction->plan->title,
+        ],
       ],
     ];
 
@@ -72,6 +72,7 @@ class TransactionController extends Controller
       ], 500);
     }
   }
+
   public function callback(Request $request)
   {
     $serverKey = config('midtrans.server_key');
