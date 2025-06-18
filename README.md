@@ -1,27 +1,15 @@
-# 🎬 NontonFlix – Platform Streaming Video
+# 🎬 NontonFlix - Streaming Platform Laravel 11
 
-**NontonFlix** adalah platform streaming video berbasis web yang dibangun dengan Laravel 11. Platform ini menyediakan fitur langganan premium (subcription), autentikasi aman, serta integrasi dengan sistem pembayaran menggunakan Midtrans.
-
----
-
-## 🚀 Fitur Utama
-
-- 🔐 **Autentikasi Aman** menggunakan Laravel Fortify
-- 💳 **Sistem Langganan** dengan integrasi **Midtrans Payment Gateway**
-- 🧠 **Manajemen User & Middleware** berbasis role & langganan
-- 🗄️ **Database**: MySQL
-- 📬 **Email Notifikasi** (berlangganan, pembayaran, dll.)
-- 🛠️ **Command Jobs & Scheduler** untuk eksekusi otomatisasi (tagihan, reminder, dll.)
-- 📺 **Streaming Konten Video**
+NontonFlix adalah platform streaming berbasis web yang dibangun dengan Laravel 11 dan dilengkapi fitur autentikasi, langganan membership, serta integrasi dengan Midtrans untuk pembayaran. Dirancang untuk menyediakan konten video berbayar.
 
 ---
 
 ## 🛠️ Teknologi yang Digunakan
 
 | Teknologi         | Deskripsi                         |
-|-------------------|-----------------------------------|
+| ----------------- | --------------------------------- |
 | Laravel 11        | Backend Framework utama           |
-| Laravel Fortify   | Autentikasi dan manajemen sesi    |
+| Laravel Fortify   | Autentikasi dan manajemen session |
 | Midtrans API      | Integrasi sistem pembayaran       |
 | MySQL             | Database relasional               |
 | Blade Template    | Tampilan frontend dinamis         |
@@ -30,101 +18,121 @@
 
 ---
 
-## 📂 Struktur Proyek (Ringkasan)
+## 🚀 Fitur Utama
+
+- ✅ **Autentikasi dan Registrasi** menggunakan Laravel Fortify.
+- 💬 **Notifikasi Email** otomatis saat membership berakhir.
+- ⏱ **Scheduled Job** untuk memeriksa dan mengatur status langganan.
+- 💳 **Integrasi Payment Gateway** Midtrans (Snap & callback).
+- 🎥 **Manajemen Film dan Kategori.**
+- 📊 **Sistem Rating Film.**
+- 🛡 **Pembatasan Akses Limit Device.**
+- 🔐 Middleware kustom seperti `CheckDeviceLimit` dan `LogoutDevice`
+
+---
+
+## 📁 Struktur Folder Penting
 
 ```
-app/
-├── Console/Commands     # Custom command untuk scheduler
-├── Http/
-│   ├── Controllers/     # Controller utama
-│   ├── Middleware/      # Proteksi akses user
-├── Jobs/                # Background job processing
-routes/
-├── web.php              # Routing utama aplikasi
-resources/
-├── views/               # Blade templates
-config/
-├── fortify.php          # Konfigurasi Fortify
+.
+├── app/
+│ ├── Actions/Fortify/ # Kustomisasi login & register Fortify
+│ ├── Events/ # Event membership kadaluarsa
+│ ├── Http/Controllers/ # Movie, Category, Subscription, etc
+│ ├── Http/Middleware/ # Middleware custom untuk perangkat
+│ ├── Jobs/ # Penjadwalan dan notifikasi
+│ ├── Listeners
+│ ├── Mail
+│ ├── Models/ # User, Movie, Plan, etc
+│ ├── Providers/ # Service & Fortify provider
+│ └── Services/ # Logika device limit
+│ └── View/
+├── resources/views/ # Blade templates
+└── routes/
+├── web.php
+└── api.php
 ```
 
 ---
 
-## ⚙️ Instalasi & Setup
+## 📦 Library & Dependency Tambahan
 
-1. **Clone Repository**
+- `laravel/fortify : ` Autentikasi headless
+- `midtrans/midtrans-php : ` - Payment gateway Snap API
+
+---
+
+## 🛠️ Instalasi & Setup
+
+1. Clone repository
+   ```bash
+   git clone https://github.com/bagusizzanm/nontonflix.git
+   cd nontonflix
+   ```
+2. Install dependency
+   ```bash
+   composer install
+   npm install && npm run dev
+   ```
+3. Setup environment
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+4. Set konfigurasi database di .env
+   ```bash
+   DB_DATABASE=nontonflix
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+5. Migrasi dan Seeder
+   ```bash
+   php artisan migrate --seed
+   ```
+6. Konfigurasi Notifikasi Email
+
+   ```
+   MAIL_MAILER=smtp
+   MAIL_HOST=smtp.mailtrap.io
+   MAIL_PORT=1025
+   MAIL_USERNAME=null
+   MAIL_PASSWORD=null
+   MAIL_ENCRYPTION=null
+   MAIL_FROM_ADDRESS="hello@example.com"
+   MAIL_FROM_NAME="${APP_NAME}"
+
+   ```
+
+## 📅 Scheduled Job
+
+Aplikasi ini memiliki scheduler untuk memeriksa status langganan setiap hari.
+
+Tambahkan ini ke cron di server:
+
 ```bash
-git clone https://github.com/username/nontonflix.git
-cd nontonflix
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-2. **Instalasi Dependency**
-```bash
-composer install
-npm install && npm run dev
-```
+## 💳 Pembayaran (Midtrans Integration)
 
-3. **Konfigurasi Environment**
-```bash
-cp .env.example .env
-php artisan key:generate
-```
+- Pastikan MIDTRANS_SERVER_KEY dan MIDTRANS_CLIENT_KEY diset di .env.
 
-4. **Migrasi Database**
-```bash
-php artisan migrate
-```
+- Implementasi menggunakan Snap Redirect & Callback. File terkait: TransactionController.php, api.php.
 
-5. **Jalankan Server**
-```bash
-php artisan serve
-```
+## 🔐 Middleware Kustom
 
----
+- CheckDeviceLimit: Membatasi jumlah perangkat aktif pengguna.
 
-## 💳 Integrasi Midtrans
+- LogoutDevice: Menghapus perangkat saat logout.
 
-- Daftarkan akun di [https://midtrans.com](https://midtrans.com)
-- Ambil **Server Key** dan **Client Key**
-- Tambahkan pada file `.env`:
-```
-MIDTRANS_SERVER_KEY=your_server_key
-MIDTRANS_CLIENT_KEY=your_client_key
-```
+- DeviceLimitService: Manajemen ID perangkat unik.
 
----
+## 📬 Notifikasi
 
-## 📅 Scheduler & Jobs
+**Notifikasi akan dikirim melalui email saat:**
 
-Tambahkan cron berikut di server untuk menjalankan scheduler:
+- Membership pengguna berakhir.
 
-```
-* * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
-```
+- Transaksi berhasil atau gagal.
 
----
-
-## 📫 Notifikasi Email
-
-- Konfigurasikan `.env` Anda:
-```
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=1025
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="${APP_NAME}"
-```
-
----
-
-## 🙌 Kontribusi
-
-Pull request sangat diterima. Untuk perubahan besar, silakan buka *issue* terlebih dahulu untuk didiskusikan.
-
----
-
-## 📄 Lisensi
-
-MIT License © 2025 Muhammad Bagus Izzan Muafy
+- File terkait: MembershipNotificationExpired.php, Event MembershipHasExpired.php
